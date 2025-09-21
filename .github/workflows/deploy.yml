@@ -1,4 +1,4 @@
-name: Deploy Static HTML to EC2 via Nginx (HTTPS)
+name: Deploy Landing Page to EC2 via Nginx (HTTPS)
 
 on:
   push:
@@ -21,13 +21,11 @@ jobs:
           source: "app/*"
           target: "/var/www/html"
           script: |
-            # Ensure permissions
+            # Set permissions
             sudo chown -R www-data:www-data /var/www/html
 
-            # Create SSL folder if not exists
+            # SSL setup
             sudo mkdir -p /etc/nginx/ssl
-
-            # Generate self-signed SSL certificate (if not exists)
             if [ ! -f /etc/nginx/ssl/nginx.crt ] || [ ! -f /etc/nginx/ssl/nginx.key ]; then
               sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
                 -keyout /etc/nginx/ssl/nginx.key \
@@ -35,7 +33,7 @@ jobs:
                 -subj "/C=US/ST=State/L=City/O=Org/OU=Dev/CN=localhost"
             fi
 
-            # Configure Nginx for HTTPS
+            # Nginx config for HTTPS
             sudo bash -c 'cat > /etc/nginx/sites-available/default <<EOF
             server {
                 listen 443 ssl;
@@ -59,9 +57,7 @@ jobs:
             }
             EOF'
 
-            # Test Nginx config
+            # Test and restart Nginx
             sudo nginx -t
-
-            # Restart Nginx
             sudo systemctl restart nginx
             sudo systemctl status nginx --no-pager

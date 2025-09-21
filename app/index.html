@@ -1,52 +1,101 @@
-<!-- app/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CI/CD Test - Colorful</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #fff;
-            overflow: hidden;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emmanuel's CI/CD Landing Page</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: #fff;
+    }
 
-        h1 {
-            font-size: 3em;
-            text-align: center;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
-            animation: pulse 2s infinite alternate;
-        }
+    header {
+      background: rgba(0,0,0,0.3);
+      padding: 50px 20px;
+      text-align: center;
+    }
 
-        @keyframes pulse {
-            0% { transform: scale(1); color: #fff; }
-            50% { transform: scale(1.1); color: #ffeb3b; }
-            100% { transform: scale(1); color: #fff; }
-        }
+    header h1 {
+      font-size: 3em;
+      margin: 0;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+    }
 
-        .container {
-            background: rgba(0,0,0,0.3);
-            padding: 40px 60px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      padding: 20px;
+      background: rgba(0,0,0,0.2);
+    }
 
-        p {
-            font-size: 1.5em;
-            text-align: center;
-            margin-top: 20px;
-            color: #ffe;
-        }
-    </style>
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #ffd700;
+    }
+
+    section {
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    section h2 {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    section p {
+      font-size: 1.2em;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    footer {
+      background: rgba(0,0,0,0.3);
+      text-align: center;
+      padding: 30px 20px;
+      font-size: 0.9em;
+    }
+  </style>
 </head>
 <body>
-    <div class="con
+  <header>
+    <h1>Welcome to Emmanuel's CI/CD Demo!</h1>
+  </header>
 
+  <nav>
+    <a href="#about">About</a>
+    <a href="#features">Features</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <section id="about">
+    <h2>About This Project</h2>
+    <p>This is a fully automated landing page deployed via GitHub Actions, Terraform, and Nginx on AWS EC2. Every push to the main branch triggers deployment, demonstrating a complete CI/CD pipeline.</p>
+  </section>
+
+  <section id="features">
+    <h2>Features</h2>
+    <p>- Automated deployment to EC2 on push<br>- Nginx serving static content<br>- HTTPS enabled with self-signed certificate<br>- Responsive and colorful design</p>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>Reach out to Emmanuel at <strong>emmanuel@example.com</strong> for questions or collaborations.</p>
+  </section>
+
+  <footer>
+    &copy; 2025 Emmanuel's CI/CD Demo. All rights reserved.
+  </footer>
+</body>
+</html>
