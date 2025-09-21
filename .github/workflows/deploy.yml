@@ -1,36 +1,11 @@
-name: Deploy Static HTML to EC2
-
-on:
-  push:
-    branches: [ "main" ]
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Deploy HTML via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
-          script: |
-            # Install Apache if not installed
-            if ! dpkg -s apache2 >/dev/null 2>&1; then
-              sudo apt update
-              sudo apt install -y apache2
-            fi
-
-            # Copy app files to /var/www/html
-            sudo cp -r app/* /var/www/html/
-
-            # Set permissions
-            sudo chown -R www-data:www-data /var/www/html
-
-            # Restart Apache
-            sudo systemctl restart apache2
-            sudo systemctl status apache2 --no-pager
+- name: Deploy HTML via SSH
+  uses: appleboy/ssh-action@v1.0.3
+  with:
+    host: ${{ secrets.EC2_HOST }}
+    username: ${{ secrets.EC2_USER }}
+    key: ${{ secrets.EC2_KEY }}
+    source: "app/*"
+    target: "/var/www/html"
+    script: |
+      sudo chown -R www-data:www-data /var/www/html
+      sudo systemctl restart apache2
