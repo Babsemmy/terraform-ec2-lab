@@ -1,4 +1,4 @@
-name: Deploy Static HTML to EC2
+name: Deploy Static HTML to EC2 via Nginx (HTTPS)
 
 on:
   push:
@@ -21,5 +21,47 @@ jobs:
           source: "app/*"
           target: "/var/www/html"
           script: |
+            # Ensure permissions
             sudo chown -R www-data:www-data /var/www/html
-            sudo systemctl restart apache2
+
+            # Create SSL folder if not exists
+            sudo mkdir -p /etc/nginx/ssl
+
+            # Generate self-signed SSL certificate (if not exists)
+            if [ ! -f /etc/nginx/ssl/nginx.crt ] || [ ! -f /etc/nginx/ssl/nginx.key ]; then
+              sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+                -keyout /etc/nginx/ssl/nginx.key \
+                -out /etc/nginx/ssl/nginx.crt \
+                -subj "/C=US/ST=State/L=City/O=Org/OU=Dev/CN=localhost"
+            fi
+
+            # Configure Nginx for HTTPS
+            sudo bash -c 'cat > /etc/nginx/sites-available/default <<EOF
+            server {
+                listen 443 ssl;
+                server_name localhost;
+
+                ssl_certificate /etc/nginx/ssl/nginx.crt;
+                ssl_certificate_key /etc/nginx/ssl/nginx.key;
+
+                root /var/www/html;
+                index index.html;
+
+                location / {
+                    try_files \$uri \$uri/ =404;
+                }
+            }
+
+            server {
+                listen 80;
+                server_name localhost;
+                return 301 https://\$host\$request_uri;
+            }
+            EOF'
+
+            # Test Nginx config
+            sudo nginx -t
+
+            # Restart Nginx
+            sudo systemctl restart nginx
+            sudo systemctl status nginx --no-pager
